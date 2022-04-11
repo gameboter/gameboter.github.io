@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>ros-game</title>
+	   
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script type="text/javascript" src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <link href="https://netdna.bootstrapcdn.com/bootswatch/3.0.0/slate/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css"/>
+
+        <style type="text/css">
+		    table {
+		  border-collapse: collapse;
+		}
+
+		td, th {
+		  border: 1px solid #999;
+		  padding: 0.5rem;
+		  text-align: left;
+		  font-size: big;
+          color: #ccc;
+		}
+    </style>
+
+ </head>
+
+<body>
+<script>
+
+let login_url  = "https://ros-gateweb.lightcon.net/gateway/authenticate/gamebase";
+var protocol_url = "";
+// var auth_url = "https://ros-gamefront.lightcon.net/api/user/auth_select";
+let server_cdn_url = "https://ros-gateweb.lightcon.net/gateway/meta/cdn/server";
+// var queue_url = "https://ros-queue.lightcon.net/queue/info";
+let cap_url = "https://ros-gateweb.lightcon.net/gateway/auth/captcha/info";
+let refresh_tcp = "https://ros-gateweb.lightcon.net/gateway/refresh/url/server/tcp";
+
+
+function login(url,userid,login_token,autoFarm){
+	let xhr = new XMLHttpRequest();
+	xhr.open("POST", url);
+
+	xhr.setRequestHeader("accept", "*/*");
+	xhr.setRequestHeader("content-type", "application/x-www-form-urlencoded");
+
+	xhr.onreadystatechange = function () {
+	   if (xhr.readyState === 4) {
+	      console.log(xhr.responseText);
+	      let response = JSON.parse(xhr.responseText);
+	      var user_id = response.user_id;
+	      var token = response.access_token;
+
+	      var auth_url = response.server_url.game_url + "/api/user/auth_select";
+	      var queue_url = response.queue_info.queue_server_url + "/queue/info";
+	      protocol_url = response.server_url.game_url +"/api/multi_protocol";
+	      cap_url = response.server_url.game_url +"/gateway/auth/captcha/info";
+	      var sector = response.server_url.server_id;
+
+	      console.log(user_id);
+	      console.log(token);
+	      //depart_team_silver(user_id,token);
+	      //mine_all(user_id,token);
+	      
+
+	     //checkCapcha(user_id);
+	     queue_request(user_id,token,queue_url,sector,auth_url,autoFarm);
+
+	      
+	   }};
+
+
+var login_info =  
+
+{"uuid":"","client_version":"1.0.22.03161653","auth_id":userid,"auth_token":login_token,"provider":"","device_id":"","device_type":"","device_model":"samsung SM-A805N","device_token":"","locale":"US","language":"ENG","platform":"","force_flag":true,"auto_server_select":false};
+
+
+
+	var data = btoa(JSON.stringify(login_info));
+	xhr.send("data=" +  data);
+}
+
+
+
+function action_protocol_request(action,url){
+
+	let xhr = new XMLHttpRequest();
+	xhr.open("POST", url);
+
+	xhr.setRequestHeader("accept", "*/*");
+	xhr.setRequestHeader("content-type", "application/x-www-form-urlencoded");
+	xhr.setRequestHeader("User-Agent", "RiseofStars/93 CFNetwork/1329 Darwin/21.3.0");
+
+	xhr.onreadystatechange = function () {
+	   if (xhr.readyState === 4) {
+	      console.log(xhr.responseText);
+	      let response = JSON.parse(xhr.responseText);
+	      //{"status":-40000,"message":"Client Token Not Match"}
+
+	      //{"status":-20001,"message":"Session is not exist"}
+
+	      if(response.message == "Client Token Not Match" || response.message == "Session is not exist"){
+	      	clearInterval(autoFarmHandler);
+	      	setTimeout(() => {
+						autoStart();
+						//retry after 20 mins.
+	      	}, 1000 * 60 * 20);
+	      	
+	      }
+	   }};
+
+	console.log("protocol = " + action);
+	data = btoa(JSON.stringify(action));
+	xhr.send("data=" + data);	
+	//{"status":-20001,"message":"captcha status fail"}
+
+}
+
+function queue_request(userid,token,queue_url,sector,auth_url,autoFarm){
+
+	var queue = {"sector_id":sector,"user_id":userid};
+
+	let xhr = new XMLHttpRequest();
+	xhr.open("POST", queue_url);
+
+	xhr.setRequestHeader("accept", "*/*");
+	xhr.setRequestHeader("content-type", "application/x-www-form-urlencoded");
+	xhr.onreadystatechange = function () {
+	   if (xhr.readyState === 4) {
+	      console.log(xhr.responseText);
+	      let response = JSON.parse(xhr.responseText);
+	      can_enter = response.can_enter_now;
+	      console.log(can_enter);
+	      if(can_enter){
+	      	getServer(userid,token);
+	      	selectauth(userid,token,auth_url,autoFarm);
+	      	setTimeout(() => {
+	      		// lobbycheck(userid,token)
+	      		// mine_all(userid,token);
+	      		// get_supplyship(userid,token);
+	      		// getAdReward(userid,token,counter);
+	      		// getdailiyreward(userid,token);
+						//getGuildList(userid,token,1,24);
+
+
+	      	}, 5000);
+	      	
+	      } else {
+	      	setTimeout(() => {
+				queue_request(userid,token,queue_url,sector,auth_url,autoFarm);
+
+	      	}, 10000);
+
+	      }
+
+	   }};
+
+	data = btoa(JSON.stringify(queue));
+	xhr.send("data=" +  data);	
+
+}
+
+
+function getServer(userid,token){
+	var server = {"access_token":token,"user_id":userid};
+	action_protocol_request(server,server_cdn_url);
+	
+}
+
+function checkCapcha(userid){
+	var cap = {"user_id":userid,"auth_type":"gamebase"}
+	action_protocol_request(cap,cap_url);
+
+	//{"status":-20001,"message":"captcha status fail"}
+}
+
+
+function selectauth(userid,token,auth_url,autoFarm){
+	// {"device_id":"C7BC3DE0-60EA-46B2-9378-A4C39F628382","client_version":"1.0.18.03022050","uuid":"621a72d55d35080f5964a285","access_token":"778a658c89203a10a4d7d2abd4dae810","user_id":"LNG9KDM8W9JP6YFJ"}
+	var auth = {"device_id":"","client_version":"1.0.22.03161653","uuid":"","access_token":token,"user_id":userid};
+
+// {"device_id":"4527e64fa659bcedfbaec877ef753215","client_version":"1.0.22.03161653","uuid":"6231813ba4a5733c020f461e","access_token":"b8f8da9de51bd8424bb264abef494704","user_id":"QYD49R7JRWM9K7BW"}
+
+	let xhr = new XMLHttpRequest();
+	xhr.open("POST", auth_url);
+
+	xhr.setRequestHeader("accept", "*/*");
+	xhr.setRequestHeader("content-type", "application/x-www-form-urlencoded");
+
+	xhr.onreadystatechange = function () {
+	   if (xhr.readyState === 4) {
+	      console.log(xhr.responseText);
+	      let response = JSON.parse(xhr.responseText);
+	      var worker_list = response.station.workbenches;
+	      var item_list = response.inventory.items;
+	      var amount = 1 ;
+	      Object.keys(item_list).forEach(function(key) {
+	      		if(amount < item_list[key].amount){
+	      			amount = item_list[key].amount;
+	      			move_item_id = item_list[key].item_id;
+	      		}
+	      });
+
+	      
+	      var worker_list = response.station.workbenches;
+	      completeTask(userid,token,worker_list.MU1.task_id);
+	      completeTask(userid,token,worker_list.MU2.task_id);
+
+	      var module_list = response.station.modules
+	      var index = 0 ; 
+	      var remove_id_list = [];
+	      var build_id_list = [];
+	      Object.keys(module_list).forEach(function(key) {
+	      index ++;
+
+
+			  if(module_list[key].module_type == "mineplatform" && module_list[key].is_lock == true){
+			  	unlockPlatform(userid,token,key);
+			  }
+
+			  if(module_list[key].module_type == "mine"){
+			  	if(module_list[key].resource_type != "silver"){
+			  		if(module_list[key].resource_type == "none"){
+
+			  			build_id_list.push(module_list[key]);
+			  			
+			  		}else{
+			  			remove_id_list.push(module_list[key]);
+			  		}
+			  	}
+			  }
+
+
+			  console.log('Key : ' + key + ', Value : ' + module_list[key]);
+			})
+
+	      for (let i = 0; i < remove_id_list.length; i++) {
+				  setTimeout(function timer() {
+				    removeMine(userid,token,remove_id_list[i].module_id,remove_id_list[i].resource_type);
+				  }, (i+1)* 2000);
+				}
+
+				for (let i = 0; i < build_id_list.length; i++) {
+				  setTimeout(function timer() {
+				    buildMine(userid,token,build_id_list[i].module_id);
+				  }, (i+1) * 4000);
+				}
+	   }};
+
+	console.log("protocol = " + auth);
+	data = btoa(JSON.stringify(auth));
+	xhr.send("data=" + data);	
+
+	// var x = response.station.location[0];
+	// var y = response.station.location[1];
+
+}
+
+
+function unlockPlatform(userid,token,module_id){
+	var action = {"urls":["user/station/module/unlock_platform"],"requests":[{"module_id":module_id,"access_token":token,"user_id":userid}],"access_token":token,"user_id":userid};
+	action_protocol_request(action,protocol_url);
+
+}
+
+function buildMine(userid,token,module_id){
+	var action = {"urls":["user/station/mine/build","user/account/message/get_badges","user/account/store/time_box/status"],"requests":[{"module_id":module_id,"resource_type":"silver","is_use_gold":0,"access_token":token,"user_id":userid},{"access_token":token,"user_id":userid},{"access_token":token,"user_id":userid}],"access_token":token,"user_id":userid};
+
+	let xhr = new XMLHttpRequest();
+	xhr.open("POST", protocol_url);
+
+	xhr.setRequestHeader("accept", "*/*");
+	xhr.setRequestHeader("content-type", "application/x-www-form-urlencoded");
+	xhr.setRequestHeader("User-Agent", "RiseofStars/93 CFNetwork/1329 Darwin/21.3.0");
+	xhr.onreadystatechange = function () {
+	   if (xhr.readyState === 4) {
+	      console.log(xhr.responseText);
+	      let response = JSON.parse(xhr.responseText);
+	      let resp = JSON.parse(response.responses[0]);
+	      if(resp.workbench.MU1.related_module_id == module_id){
+	      	completeTask(userid,token,resp.workbench.MU1.task_id);
+	      }else if (resp.workbench.MU2.related_module_id == module_id){
+	      	completeTask(userid,token,resp.workbench.MU2.task_id);
+	      }else{
+	      	console.log("Error ! workbrench not found !! ");
+	      }
+	   }};
+
+	console.log("protocol = " + action);
+	data = btoa(JSON.stringify(action));
+	xhr.send("data=" + data);	
+
+
+
+}
+
+function removeMine(userid,token,module_id,resource_type){
+	var action = {"urls":["user/account/message/get_badges","user/account/store/time_box/status","user/station/mine/destroy"],"requests":[{"access_token":token,"user_id":userid},{"access_token":token,"user_id":userid},{"module_id":module_id,"resource_type":resource_type,"is_use_gold":0,"access_token":token,"user_id":userid}],"access_token":token,"user_id":userid};
+
+	let xhr = new XMLHttpRequest();
+	xhr.open("POST", protocol_url);
+
+	xhr.setRequestHeader("accept", "*/*");
+	xhr.setRequestHeader("content-type", "application/x-www-form-urlencoded");
+    xhr.setRequestHeader("User-Agent", "RiseofStars/93 CFNetwork/1329 Darwin/21.3.0");
+	xhr.onreadystatechange = function () {
+	   if (xhr.readyState === 4) {
+	      console.log(xhr.responseText);
+	      let response = JSON.parse(xhr.responseText);
+	      let resp = JSON.parse(response.responses[2]);
+	      if(resp.workbench.MU1.related_module_id == module_id){
+	      	completeTask(userid,token,resp.workbench.MU1.task_id);
+	      }else if (resp.workbench.MU2.related_module_id == module_id){
+	      	completeTask(userid,token,resp.workbench.MU2.task_id);
+	      }else{
+	      	console.log("Error ! workbrench not found !! ");
+	      }
+
+	      setTimeout(function() { buildMine(userid,token,module_id); }, 2000);
+	   }};
+
+	console.log("protocol = " + action);
+	data = btoa(JSON.stringify(action));
+	xhr.send("data=" + data);	
+
+
+}
+
+function completeTask(userid,token,task_id){
+ var action = {"urls":["user/station/workbench/complete"],"requests":[{"is_use_gold":0,"task_id":task_id,"access_token":token,"user_id":userid}],"access_token":token,"user_id":userid};
+
+ 	action_protocol_request(action,protocol_url);
+}
+
+
+function getdailiyreward(userid,token){
+	var daily = {"urls":["user/reward/attendance/reward"],"requests":[{"reward_day":"19","access_token":token,"user_id":userid}],"access_token":token,"user_id":userid};
+
+	action_protocol_request (daily,protocol_url);
+
+	var level = {"urls":["commander/level_up/update"],"requests":[{"checked_level":19,"access_token":token,"user_id":userid}],"access_token":token,"user_id":userid};
+
+	action_protocol_request (level,protocol_url);
+
+}
+
+function lobbycheck(userid,token){
+	var lobbycheck = {"urls":["user/event/lobby/get","user/reward/lobby/check","user/account/fund/menu_reward","user/account/fund/list","portal_server/galaxy_info_list","user/account/store/time_box/status","user/account/message/get_badges","user/account/refresh/module","user/account/refresh/module","user/account/refresh/module","user/account/refresh/hero_inventory","user/achievement/popup_list/get","user/account/store/time_box/status"],"requests":[{"access_token":token,"user_id":userid},{"access_token":token,"user_id":userid},{"access_token":token,"user_id":userid},{"event_id":200001,"access_token":token,"user_id":userid},{"access_token":token,"user_id":userid},{"access_token":token,"user_id":userid},{"access_token":token,"user_id":userid},{"module_type":"crafting","access_token":token,"user_id":userid},{"module_type":"exchange","access_token":token,"user_id":userid},{"module_type":"blackmarket","access_token":token,"user_id":userid},{"access_token":token,"user_id":userid},{"access_token":token,"user_id":userid},{"access_token":token,"user_id":userid}],"access_token":token,"user_id":userid}
+
+	action_protocol_request (lobbycheck,protocol_url);
+}
+
+
+function unlockSilver(){
+		let login_token = document.getElementById("login").value.trim().toString();
+		let userid = document.getElementById("userid").value.trim().toString();
+
+		login(login_url,userid,login_token,-1);
+
+}
+
+
+
+
+setTimeout(function () {
+        document.getElementById('tutorial').onload = function() {
+            	var iframeWindow = document.getElementById("tutorial");
+							iframeWindow.contentWindow.console.log = function() { /* nop */ };
+        }
+
+}, 1000);
+
+
+
+</script>
+
+<!-- db/apis : user,guild,planet,ranking,commander,common,council,portal_server -->
+<div class="form-group">
+
+<iframe id="tutorial"
+    title="教程"
+    width="1000"
+    height="600"
+    src="https://docs.qq.com/doc/DZmNPbGl6VmVJeWh6">
+</iframe>
+
+  </div>
+
+	 <div class="form-group">
+    <label for="token">Login Token</label>
+    <input class="form-control" type="text" placeholder="Default input" id="login">
+    <small id="emailHelp" class="form-text text-muted">Get from rooted Android Device. /data/data/com.wemademax.riseofstars/shared_prefs/com.toast.gamebase.xml -> auth_gamebase_token</small>
+  </div>
+
+
+  <div class="form-group">
+    <label for="userid">User id</label>
+    <input class="form-control" type="text" placeholder="Default input" id="userid">
+  </div>
+
+  <button type="btn-default" onclick="unlockSilver()" class="btn btn-primary">Unlock Slilver Mines</button>
+
+
+
+
+</body>	
+</html>
