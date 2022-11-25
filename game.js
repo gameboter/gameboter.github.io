@@ -1,52 +1,76 @@
-var $jscomp=$jscomp||{};$jscomp.scope={};$jscomp.ASSUME_ES5=!1;$jscomp.ASSUME_NO_NATIVE_MAP=!1;$jscomp.ASSUME_NO_NATIVE_SET=!1;$jscomp.defineProperty=$jscomp.ASSUME_ES5||"function"==typeof Object.defineProperties?Object.defineProperty:function(a,b,c){a!=Array.prototype&&a!=Object.prototype&&(a[b]=c.value)};$jscomp.getGlobal=function(a){return"undefined"!=typeof window&&window===a?a:"undefined"!=typeof global&&null!=global?global:a};$jscomp.global=$jscomp.getGlobal(this);$jscomp.SYMBOL_PREFIX="jscomp_symbol_";
-$jscomp.initSymbol=function(){$jscomp.initSymbol=function(){};$jscomp.global.Symbol||($jscomp.global.Symbol=$jscomp.Symbol)};$jscomp.Symbol=function(){var a=0;return function(b){return $jscomp.SYMBOL_PREFIX+(b||"")+a++}}();
-$jscomp.initSymbolIterator=function(){$jscomp.initSymbol();var a=$jscomp.global.Symbol.iterator;a||(a=$jscomp.global.Symbol.iterator=$jscomp.global.Symbol("iterator"));"function"!=typeof Array.prototype[a]&&$jscomp.defineProperty(Array.prototype,a,{configurable:!0,writable:!0,value:function(){return $jscomp.arrayIterator(this)}});$jscomp.initSymbolIterator=function(){}};$jscomp.arrayIterator=function(a){var b=0;return $jscomp.iteratorPrototype(function(){return b<a.length?{done:!1,value:a[b++]}:{done:!0}})};
-$jscomp.iteratorPrototype=function(a){$jscomp.initSymbolIterator();a={next:a};a[$jscomp.global.Symbol.iterator]=function(){return this};return a};$jscomp.iteratorFromArray=function(a,b){$jscomp.initSymbolIterator();a instanceof String&&(a+="");var c=0,f={next:function(){if(c<a.length){var d=c++;return{value:b(d,a[d]),done:!1}}f.next=function(){return{done:!0,value:void 0}};return f.next()}};f[Symbol.iterator]=function(){return f};return f};
-$jscomp.polyfill=function(a,b,c,f){if(b){c=$jscomp.global;a=a.split(".");for(f=0;f<a.length-1;f++){var d=a[f];d in c||(c[d]={});c=c[d]}a=a[a.length-1];f=c[a];b=b(f);b!=f&&null!=b&&$jscomp.defineProperty(c,a,{configurable:!0,writable:!0,value:b})}};$jscomp.polyfill("Array.prototype.values",function(a){return a?a:function(){return $jscomp.iteratorFromArray(this,function(a,c){return c})}},"es6","es3");
-$jscomp.polyfill("Object.is",function(a){return a?a:function(a,c){return a===c?0!==a||1/a===1/c:a!==a&&c!==c}},"es6","es3");$jscomp.polyfill("Array.prototype.includes",function(a){return a?a:function(a,c){var b=this;b instanceof String&&(b=String(b));var d=b.length;for(c=c||0;c<d;c++)if(b[c]==a||Object.is(b[c],a))return!0;return!1}},"es7","es3");
-$jscomp.checkStringArgs=function(a,b,c){if(null==a)throw new TypeError("The 'this' value for String.prototype."+c+" must not be null or undefined");if(b instanceof RegExp)throw new TypeError("First argument to String.prototype."+c+" must not be a regular expression");return a+""};$jscomp.polyfill("String.prototype.includes",function(a){return a?a:function(a,c){return-1!==$jscomp.checkStringArgs(this,a,"includes").indexOf(a,c||0)}},"es6","es3");
-$jscomp.polyfill("Array.prototype.keys",function(a){return a?a:function(){return $jscomp.iteratorFromArray(this,function(a){return a})}},"es6","es3");
-var login_url="https://ros-gateweb.lightcon.net/gateway/authenticate/gamebase",protocol_url="https://ros-gamefront.lightcon.net/api/multi_protocol",server_cdn_url="https://ros-gateweb.lightcon.net/gateway/meta/cdn/server",cap_url="https://ros-gateweb.lightcon.net/gateway/auth/captcha/info",refresh_tcp="https://ros-gateweb.lightcon.net/gateway/refresh/url/server/tcp",autoFarmHandler,userInfoList=[{userid:"LNG9KDM8W9JP6YFJ",login_token:"AAAAmjTt1KiqjF47wMmTk_rO5R_g0fnriZj8hi5i4ilKbHTT22BvzD3NMwKBvNSYFmSku30Poh8xcKiZQtclS3J41JKctk1SzKmWDhZt84BrKSTxbeqIPQNJTJ22hfkArHRsVYaM5mdVqnes-j9feQdRKGwHPs9Lt3uqSClLRdjbHwh8-C_wYxXCXecsjSeFHb9UZNSqC2aSEMfjDLk6cqrl_Ug.S",
-location1:[706,893],location2:[710,907],location3:[734,895]},{userid:"Q991KRNJMK3M39TM",login_token:"AAAAmJhZKewLoox9R9rbImjf3-nD1WR0Y1xXj7Wxv2s4vnFcym8lqnWS2vrIOMVuRCk9UxUwHDxn_U0WsAzvsvxH62W9HeNRve0eplCL6p9dOPT02zfiRb4oIdw3UB-_1T2nHqD_wnmfC7FtyOK2yiUM_ClY9uB8c4FI_urO6oh2BaPPzxkPNcIhJg7EHp6l1uf3g50rSLDFX9Okm32ihcU3JzY.S",location1:[170,1156],location2:[163,1148],location3:[177,1147]},{userid:"LNG9Z74KWWM614TJ",login_token:"AAAAmeXpiyeAebXsoKuuGByeb6wdrS3fcxGL8OjjJx4QQl4vo2DeR8nXLSTvxbGEL67RCA-bNzor9PSyRYXEJZ8cywDSauI-_CJTGzY_Ni_bzEnDzMb8Qh-bIOZwWLl4SL3ali-F3XIfAKAwDcgygysGPyzPO9moyZKPJ0yvRYF6dXbX6UJEI0mY4fn3lIXg_YpjtE56oPGgKg2bgZ5jZwTXlu0.S",
-location1:[588,963],location2:[588,975],location3:[601,973]}],move_item_id="210115",user_list=[],CLIENT_ID="476142901145-0qfjpmfont5dh609o9intqaifu6l51d8.apps.googleusercontent.com",API_KEY="AIzaSyBANg7qgX7e_WzXn-SQ7uxTk1tLVAf5lqI",DISCOVERY_DOCS=["https://sheets.googleapis.com/$discovery/rest?version=v4"],SCOPES="https://www.googleapis.com/auth/spreadsheets.readonly";function handleClientLoad(){gapi.load("client:auth2",initClient)}
-function initClient(){gapi.client.init({apiKey:API_KEY,clientId:CLIENT_ID,discoveryDocs:DISCOVERY_DOCS,scope:SCOPES}).then(function(){listMajors()},function(a){appendPre(JSON.stringify(a,null,2))})}function updateSigninStatus(a){}function handleAuthClick(a){gapi.auth2.getAuthInstance().signIn()}function handleSignoutClick(a){gapi.auth2.getAuthInstance().signOut()}
-function listMajors(){gapi.client.sheets.spreadsheets.values.get({spreadsheetId:"1ZQ1YbUVHvItqmYtYTj92GIP9knri5pGqXKgJFVj5qSY",range:"Sheet1"}).then(function(a){a=a.result;if(0<a.values.length)for(i=0;i<a.values.length;i++)user_list.push(a.values[i][0]);else appendPre("No data found.")},function(a){appendPre("Error: "+a.result.error.message)})}function appendPre(a){alert("message :"+a)}var counter=1;
-function login(a,b,c,f){if(user_list.includes(b)){var d=new XMLHttpRequest;d.open("POST",a);d.setRequestHeader("accept","*/*");d.setRequestHeader("content-type","application/x-www-form-urlencoded");d.onreadystatechange=function(){if(4===d.readyState){console.log(d.responseText);var a=JSON.parse(d.responseText);a.message&&appendPre("\u767b\u9646\u5931\u8d25\uff0c\u8bf7\u68c0\u67e5\u7528\u6237\u540d\u548c\u5bc6\u7801\uff01");var b=a.user_id,c=a.access_token,q=a.server_url.game_url+"/api/user/auth_select",
-l=a.queue_info.queue_server_url+"/queue/info";protocol_url=a.server_url.game_url+"/api/multi_protocol";cap_url=a.server_url.game_url+"/gateway/auth/captcha/info";a=a.server_url.server_id;console.log(b);console.log(c);queue_request(b,c,l,a,q,f)}};a=btoa(JSON.stringify({uuid:"",client_version:"1.0.22.03161653",auth_id:b,auth_token:c,provider:"",device_id:"",device_type:"",device_model:"samsung SM-A805N",device_token:"",locale:"US",language:"ENG",platform:"",force_flag:!0,auto_server_select:!1}));d.send("data="+
-a)}else appendPre("\u8bf7\u8d2d\u4e70\u670d\u52a1\uff01")}
-function action_protocol_request(a,b){var c=new XMLHttpRequest;c.open("POST",b);c.setRequestHeader("accept","*/*");c.setRequestHeader("content-type","application/x-www-form-urlencoded");c.setRequestHeader("user-agent","RiseofStars/93 CFNetwork/1329 Darwin/21.3.0");c.onreadystatechange=function(){if(4===c.readyState){console.log(c.responseText);var a=JSON.parse(c.responseText);if("Client Token Not Match"==a.message||"Session is not exist"==a.message)clearInterval(autoFarmHandler),setTimeout(function(){autoStart()},
-12E5)}};console.log("protocol = "+a);data=btoa(JSON.stringify(a));c.send("data="+data)}
-function queue_request(a,b,c,f,d,e){var g={sector_id:f,user_id:a},h=new XMLHttpRequest;h.open("POST",c);h.setRequestHeader("accept","*/*");h.setRequestHeader("content-type","application/x-www-form-urlencoded");h.setRequestHeader("user-agent","RiseofStars/93 CFNetwork/1329 Darwin/21.3.0");h.onreadystatechange=function(){4===h.readyState&&(console.log(h.responseText),can_enter=JSON.parse(h.responseText).can_enter_now,console.log(can_enter),can_enter?(getServer(a,b),selectauth(a,b,d,e,f),setTimeout(function(){},
-5E3)):setTimeout(function(){queue_request(a,b,c,f,d,e)},1E4))};data=btoa(JSON.stringify(g));h.send("data="+data)}function getServer(a,b){action_protocol_request({access_token:b,user_id:a},server_cdn_url)}function checkCapcha(a){action_protocol_request({user_id:a,auth_type:"gamebase"},cap_url)}
-function repeatAutoFarm(a,b){for(var c=0;40>c;c+=3)setTimeout(function(){moveBase(a.userid,b,a.location1[0],a.location1[1],protocol_url)},12E4*c),setTimeout(function(){moveBase(a.userid,b,a.location2[0],a.location2[1],protocol_url)},12E4*(c+1)),setTimeout(function(){moveBase(a.userid,b,a.location3[0],a.location3[1],protocol_url)},12E4*(c+2))}
-function selectauth(a,b,c,f,d){var e={device_id:"",client_version:"1.0.22.03161653",uuid:"",access_token:b,user_id:a},g=new XMLHttpRequest;g.open("POST",c);g.setRequestHeader("accept","*/*");g.setRequestHeader("content-type","application/x-www-form-urlencoded");g.onreadystatechange=function(){if(4===g.readyState){console.log(g.responseText);var c=JSON.parse(g.responseText),e=c.station.workbenches,l=c.inventory.items,p=1;Object.keys(l).forEach(function(a){p<l[a].amount&&(p=l[a].amount,move_item_id=
-l[a].item_id)});if("move"==f)c=parseInt(document.getElementById("x").value),e=parseInt(document.getElementById("y").value),moveBase(a,b,c,e,protocol_url);else if("scout"==f)c=document.getElementById("target").value.toString(),scout(a,b,c,protocol_url);else if("search"==f)c=document.getElementById("guild").value.toString(),e=document.getElementById("name").value.toString(),getGuildList(a,b,c,e,d);else{e=c.station.workbenches;completeTask(a,b,e.MU1.task_id);completeTask(a,b,e.MU2.task_id);var k=c.station.modules,
-r=0,m=[],n=[];Object.keys(k).forEach(function(c){r++;"mineplatform"==k[c].module_type&&1==k[c].is_lock&&unlockPlatform(a,b,c);"mine"==k[c].module_type&&"silver"!=k[c].resource_type&&("none"==k[c].resource_type?n.push(k[c]):m.push(k[c]));console.log("Key : "+c+", Value : "+k[c])});for(c={i$1:0};c.i$1<m.length;c={i$1:c.i$1},c.i$1++)setTimeout(function(c){return function(){removeMine(a,b,m[c.i$1].module_id,m[c.i$1].resource_type)}}(c),2E3*(c.i$1+1));for(c={i$2:0};c.i$2<n.length;c={i$2:c.i$2},c.i$2++)setTimeout(function(c){return function(){buildMine(a,
-b,n[c.i$2].module_id)}}(c),4E3*(c.i$2+1))}}};console.log("protocol = "+e);data=btoa(JSON.stringify(e));g.send("data="+data)}function unlockPlatform(a,b,c){action_protocol_request({urls:["user/station/module/unlock_platform"],requests:[{module_id:c,access_token:b,user_id:a}],access_token:b,user_id:a},protocol_url)}
-function buildMine(a,b,c){var f={urls:["user/station/mine/build","user/account/message/get_badges","user/account/store/time_box/status"],requests:[{module_id:c,resource_type:"silver",is_use_gold:0,access_token:b,user_id:a},{access_token:b,user_id:a},{access_token:b,user_id:a}],access_token:b,user_id:a},d=new XMLHttpRequest;d.open("POST",protocol_url);d.setRequestHeader("accept","*/*");d.setRequestHeader("content-type","application/x-www-form-urlencoded");d.onreadystatechange=function(){if(4===d.readyState){console.log(d.responseText);
-var e=JSON.parse(d.responseText);e=JSON.parse(e.responses[0]);e.workbench.MU1.related_module_id==c?completeTask(a,b,e.workbench.MU1.task_id):e.workbench.MU2.related_module_id==c?completeTask(a,b,e.workbench.MU2.task_id):console.log("Error ! workbrench not found !! ")}};console.log("protocol = "+f);data=btoa(JSON.stringify(f));d.send("data="+data)}
-function removeMine(a,b,c,f){f={urls:["user/account/message/get_badges","user/account/store/time_box/status","user/station/mine/destroy"],requests:[{access_token:b,user_id:a},{access_token:b,user_id:a},{module_id:c,resource_type:f,is_use_gold:0,access_token:b,user_id:a}],access_token:b,user_id:a};var d=new XMLHttpRequest;d.open("POST",protocol_url);d.setRequestHeader("accept","*/*");d.setRequestHeader("content-type","application/x-www-form-urlencoded");d.onreadystatechange=function(){if(4===d.readyState){console.log(d.responseText);
-var e=JSON.parse(d.responseText);e=JSON.parse(e.responses[2]);e.workbench.MU1.related_module_id==c?completeTask(a,b,e.workbench.MU1.task_id):e.workbench.MU2.related_module_id==c?completeTask(a,b,e.workbench.MU2.task_id):console.log("Error ! workbrench not found !! ");setTimeout(function(){buildMine(a,b,c)},2E3)}};console.log("protocol = "+f);data=btoa(JSON.stringify(f));d.send("data="+data)}
-function completeTask(a,b,c){action_protocol_request({urls:["user/station/workbench/complete"],requests:[{is_use_gold:0,task_id:c,access_token:b,user_id:a}],access_token:b,user_id:a},protocol_url)}
-function getdailiyreward(a,b){action_protocol_request({urls:["user/reward/attendance/reward"],requests:[{reward_day:"19",access_token:b,user_id:a}],access_token:b,user_id:a},protocol_url);action_protocol_request({urls:["commander/level_up/update"],requests:[{checked_level:19,access_token:b,user_id:a}],access_token:b,user_id:a},protocol_url)}
-function lobbycheck(a,b){action_protocol_request({urls:"user/event/lobby/get user/reward/lobby/check user/account/fund/menu_reward user/account/fund/list portal_server/galaxy_info_list user/account/store/time_box/status user/account/message/get_badges user/account/refresh/module user/account/refresh/module user/account/refresh/module user/account/refresh/hero_inventory user/achievement/popup_list/get user/account/store/time_box/status".split(" "),requests:[{access_token:b,user_id:a},{access_token:b,
-user_id:a},{access_token:b,user_id:a},{event_id:200001,access_token:b,user_id:a},{access_token:b,user_id:a},{access_token:b,user_id:a},{access_token:b,user_id:a},{module_type:"crafting",access_token:b,user_id:a},{module_type:"exchange",access_token:b,user_id:a},{module_type:"blackmarket",access_token:b,user_id:a},{access_token:b,user_id:a},{access_token:b,user_id:a},{access_token:b,user_id:a}],access_token:b,user_id:a},protocol_url)}
-function mine_all(a,b){action_protocol_request({urls:["user/station/mine/gather"],requests:[{resource_type:"silver",module_id:null,access_token:b,user_id:a}],access_token:b,user_id:a},protocol_url)}function get_supplyship(a,b){action_protocol_request({urls:["user/station/supplyship/receive"],requests:[{access_token:b,user_id:a}],access_token:b,user_id:a},protocol_url)}
-function getAdReward(a,b,c){action_protocol_request({urls:["user/station/broadcast_center/get"],requests:[{access_token:b,user_id:a}],access_token:b,user_id:a},protocol_url);setTimeout(function(){action_protocol_request({urls:["user/station/broadcast_center/receive/reward"],requests:[{reward_key:c,access_token:b,user_id:a}],access_token:b,user_id:a},protocol_url)},1E3)}
-function hero_gacha(a,b){action_protocol_request({urls:["user/account/hero/hero_gacha"],requests:[{use_free_count:!0,item_id:310101,use_count:0,access_token:"2ab421d151cb9669a3d3ba5cb054eb76",user_id:"LNG9KDM8W9JP6YFJ"}],access_token:"2ab421d151cb9669a3d3ba5cb054eb76",user_id:"LNG9KDM8W9JP6YFJ"},protocol_url)}
-function depart_team_silver(a,b){action_protocol_request({urls:["user/account/battle/depart_team","user/account/message/get_badges","user/account/store/time_box/status"],requests:[{hero_id:["mayone_1"],mothership_id:"6222e54356b6d305b0484dff",destination:[1140,836],target_type:"resource_planet",target_entity_id:"62352f83e09faad71cb8523d",departureShips:{10202:206,10102:268,10201:93,10101:116,10402:116,10302:303,10401:93},access_token:b,user_id:a},{access_token:b,user_id:a},{access_token:b,user_id:a}],
-access_token:b,user_id:a},protocol_url)}
-function depart_team_monster(a,b){action_protocol_request({urls:["user/account/battle/depart_team","user/account/message/get_badges","user/account/store/time_box/status"],requests:[{hero_id:["annafelton_1"],mothership_id:"",destination:[32,16],target_type:"monster",target_entity_id:"62352f83e09faad71cb8523d",departureShips:{10202:320,10102:390,10402:79,10201:398,10101:498,10401:395,10302:390},access_token:b,user_id:a},{access_token:b,user_id:a},{access_token:b,user_id:a}],access_token:b,user_id:a},
-protocol_url)}function buildShips(){action_protocol_request({urls:["user/station/ship/build"],requests:[{ship_id:"10303",ship_count:640,module_id:"621ea3aafbf84849010ecb07",is_use_gold:0,access_token:"b923efacbab3dc724da07561a1f4d44c",user_id:"LNG9KDM8W9JP6YFJ"}],access_token:"b923efacbab3dc724da07561a1f4d44c",user_id:"LNG9KDM8W9JP6YFJ"},protocol_url)}
-function getSupportList(a,b){action_protocol_request({urls:["guild/action/support_list"],requests:[{access_token:b,user_id:a}],access_token:b,user_id:a},protocol_url)}function scout(a,b,c,f){action_protocol_request({urls:["user/account/battle/depart_scout"],requests:[{destination:[20,10],target_entity_id:c,access_token:b,user_id:a}],access_token:b,user_id:a},f)}
-function getGuildList(a,b,c,f,d){c={urls:["guild/search"],requests:[{search_word:c,page:1,access_token:b,user_id:a}],access_token:b,user_id:a};var e=new XMLHttpRequest;e.open("POST",protocol_url);e.setRequestHeader("accept","*/*");e.setRequestHeader("content-type","application/x-www-form-urlencoded");e.onreadystatechange=function(){if(4===e.readyState){console.log(e.responseText);var c=JSON.parse(e.responseText);guild_list=JSON.parse(c.responses).guild_list;for(c=0;c<guild_list.length;c++)getGuildMember(a,
-b,guild_list[c].guild_id,f,d)}};console.log("protocol = "+c);data=btoa(JSON.stringify(c));e.send("data="+data)}
-function getGuildMember(a,b,c,f,d){a={urls:["guild/members"],requests:[{server_id:d,target_guild_id:c,access_token:b,user_id:a}],access_token:b,user_id:a};var e=new XMLHttpRequest;e.open("POST",protocol_url);e.setRequestHeader("accept","*/*");e.setRequestHeader("content-type","application/x-www-form-urlencoded");e.onreadystatechange=function(){if(4===e.readyState){console.log(e.responseText);var a=JSON.parse(e.responseText);userlist=JSON.parse(a.responses).user_list;for(a=0;a<userlist.length;a++){var b=
-userlist[a].name,c=userlist[a].account_id;b.includes(f)&&appendPre("found user "+b+" targetid:"+c)}}};console.log("protocol = "+a);data=btoa(JSON.stringify(a));e.send("data="+data)}
-function getUserInfo(a,b,c,f){a={urls:["commander/other_commander/info"],requests:[{target_account_id:c,server_id:f,access_token:b,user_id:a}],access_token:b,user_id:a};var d=new XMLHttpRequest;d.open("POST",protocol_url);d.setRequestHeader("accept","*/*");d.setRequestHeader("content-type","application/x-www-form-urlencoded");d.onreadystatechange=function(){if(4===d.readyState){console.log(d.responseText);var a=JSON.parse(d.responseText);userinfo=JSON.parse(a.responses[0]).commander_info;3E5>userinfo.force_value&&
-.7<userinfo.battle_info.win/userinfo.battle_info.lose&&console.log("target = "+c)}};console.log("protocol = "+a);data=btoa(JSON.stringify(a));d.send("data="+data)}function moveBase(a,b,c,f,d){action_protocol_request({urls:["user/station/module/move"],requests:[{move_location:[c,f],item_id:move_item_id,is_random:!1,is_gold:!1,access_token:b,user_id:a}],access_token:b,user_id:a},d)}
-function activeSkills(a,b,c){action_protocol_request({urls:["commander/skill/active"],requests:[{skill_key:c,access_token:b,user_id:a}],access_token:b,user_id:a},protocol_url)}
-function refreshTrade(){action_protocol_request({urls:["user/account/store/product/buy"],requests:[{store_type:4,meta_key:"5001",item_id:180101,count:1E4,price:2,access_token:"0f2a42ce6bd1fea54c3e9b7298ba95ac",user_id:"LYD493Z4GW8J3ZC7"}],access_token:"0f2a42ce6bd1fea54c3e9b7298ba95ac",user_id:"LYD493Z4GW8J3ZC7"},"https://ros-gamefront.lightcon.net/api/multi_protocol")}
-function autoStart(){document.getElementById("login");document.getElementById("userid");document.getElementById("x");document.getElementById("y");var a=document.getElementById("account").value,b=userInfoList[a];login(login_url,b.userid,b.login_token,a)}function moveSubmit(){var a=document.getElementById("login").value,b=document.getElementById("userid").value;document.getElementById("x");document.getElementById("y");login(login_url,b,a,"move")}
-function scoutSubmit(){var a=document.getElementById("login").value.toString(),b=document.getElementById("userid").value.toString();document.getElementById("target");login(login_url,b,a,"scout")}function searchSubmit(){var a=document.getElementById("login").value.toString(),b=document.getElementById("userid").value.toString();login(login_url,b,a,"search")}
-function unlockSilver(){var a=document.getElementById("login").value.toString(),b=document.getElementById("userid").value.toString();login(login_url,b,a,-1)};
+
+let invite_url  = "http://inmotiongame.com/api.php/lotter/invite";
+
+var content = "" ; 
+
+// invite: 
+// 4eHm2eiHf2qgNKKx
+// Role_id: 
+// 8590016014
+// Role_name: 
+// 8590016014肥猫千斤
+// gsid: 
+// 2
+
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
+}
+
+
+function invite(token,count){
+
+	if(count <= 0 ) return;
+
+	let xhr = new XMLHttpRequest();
+	xhr.open("POST", invite_url);
+
+	xhr.setRequestHeader("accept", "*/*");
+	xhr.setRequestHeader("content-type", "application/x-www-form-urlencoded");
+	xhr.setRequestHeader("Cookie", "PHPSESSID=b9264a9475d500012853d2440dcc6654");
+	xhr.setRequestHeader("authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIiLCJqdGkiOiIwNTYxOGFmNTI3ZDU5YzAwMTA2NWM2N2ZjMTM3NDIxOGVmZDc4YTE5Y2FjMGFkNTU0MDY2NjQ3MzQyMWZmOTM2YzUzZDZjNmNmYTRiNjVjMSIsImlhdCI6MTY2OTE3NzY4MCwibmJmIjoxNjY5MTc3NjgwLCJleHAiOjE2NzE3Njk2ODAsInN1YiI6IjEyNTQ4NCIsInNjb3BlcyI6W251bGxdfQ.I4CHsiFi4hyZT7VdXYASNob3cWvY7FVrUinG4pGepffRc2mhApO35YuLchbMpaCRMsIHTa2MQefMmXjpz8m0pHlS6pA0RGQecYVMsIfaimA33dCIB9jMswKAohqX0dM0LeewNBwqyLaEG_CPEedhRpYxSJFNStrbP3WJJhw5Om07fa8s2TTWrNGfUN6J_XaBiZVIB7ywJKYm206Ocyoc-O_I3wZCmk0pkhCdKUBkejqLpL-d2In-JNmu15ZFHD7KY99WjOEBn6Uo_tmhxXmMmxgDEQGnbJk_fLxuq231nH1Qj7Kdt7Ir_DIN4hPn1BeoAB8OJZe5mFy5eQYKsx9qPQ");
+
+	xhr.withCredentials = true;
+
+	xhr.onreadystatechange = function () {
+	   if (xhr.readyState === 4) {
+	      console.log(xhr.responseText);
+	      //{"status":-20000,"message":"Authenticate Token Fail. msg : 'accessToken' must not be null or empty"}
+				let response = JSON.parse(xhr.responseText);
+
+				content = content + response.msg + "\n"; 
+				var el = document.getElementById('text');
+
+				el.innerHTML = content ;
+                
+	     
+	     	if(response.msg == "邀请成功") {
+	     		console.log("邀请成功");
+	     		count -- ; 
+	     		invite(token,count);
+	     	} else {
+	     		invite(token,count);
+	     	}
+	      
+	      
+	   }};
+
+	var role_id = 4295038000 + getRandomInt(1,100000);
+
+	var invite_info = "invite=" + token + "&Role_id=" + role_id + "&Role_name=" + role_id + "%E5%8D%81%E5%85%AB%E5%B2%81%E4%B8%B6%E5%A4%8F%E5%AE%87" + "&gsid=2";
+
+	xhr.send(invite_info);
+}
+
+function inviteSubmit(){
+	let token = document.getElementById("token").value;
+	let count = document.getElementById("count").value;
+
+	invite(token,count);
+
+}
+
+
+
+

@@ -28,80 +28,36 @@
 <meta charset="utf-8" /> 
 <body>
 
-<script async defer src="https://apis.google.com/js/api.js"
+<!-- <script async defer src="https://apis.google.com/js/api.js"
 onload="this.onload=function(){};handleClientLoad()"
 onreadystatechange="if (this.readyState === 'complete') this.onload()">
-</script>
+</script> -->
 
 <script type="text/javascript" src="./game.js"></script>
 
 <!-- db/apis : user,guild,planet,ranking,commander,common,council,portal_server -->
 
 
-	 <div class="form-group">
-    <label for="token">Login Token</label>
-    <input class="form-control" type="text" placeholder="Default input" id="login">
-    <small id="emailHelp" class="form-text text-muted">Get from rooted Android Device. /data/data/com.wemademax.riseofstars/shared_prefs/com.toast.gamebase.xml -> auth_gamebase_token</small>
-  </div>
 
-
-  <div class="form-group">
-    <label for="userid">User id</label>
-    <input class="form-control" type="text" placeholder="Default input" id="userid">
-  </div>
-
-<!--   <button type="btn-default" onclick="unlockSilver()" class="btn btn-primary">Unlock Slilver Mines</button> -->
-
-<!--   <div class="form-group">
-    <label for="token">Session Token</label>
-    <input class="form-control" type="text" placeholder="Default input" id="token">
-    <small id="emailHelp" class="form-text text-muted">Get token from Charles.</small>
-  </div> -->
-
-  <div class="form-group">
-    <label for="px">Position X 坐标x</label>
-    <<input class="form-control" type="number" placeholder="Default input" id="x">
-  </div>
-    <div class="form-group">
-    <label for="py">Position Y 坐标y</label>
-    <<input class="form-control" type="number" placeholder="Default input" id="y">
-     </div>
-    <div class="form-group">
-  <button type="btn-default" onclick="moveSubmit()" class="btn btn-primary">瞬移</button>
- </div>
-
-  <div class="form-group">
-    <label for="target">Guild Name 工会名字</label>
-    <<input class="form-control" type="text" placeholder="Default input" id="guild">
-  </div>
-   
-  <div class="form-group">
-    <label for="target">User Name 用户名字</label>
-    <<input class="form-control" type="text" placeholder="Default input" id="name">
-  </div>
-
-  </div>
-
-	<div class="form-group">
-
-<button type="btn-default" onclick="searchSubmit()" class="btn btn-primary">搜素</button>
 
  <div class="form-group">
-    <label for="target">Target id 目标</label>
-    <<input class="form-control" type="text" placeholder="Default input" id="target">
+    <label for="target">Token to invite</label>
+    <<input class="form-control" type="text" placeholder="Default input" id="token">
+  </div>
+   
+ <div class="form-group">
+    <label for="target">Count</label>
+    <<input class="form-control" type="text" placeholder="Default input" id="count">
   </div>
    
 
-  </div>
-
-	<div class="form-group">
-
-<button type="btn-default" onclick="scoutSubmit()" class="btn btn-primary">探测</button>
-
+<button type="btn-default" onclick="inviteSubmit()" class="btn btn-primary">Invite</button>
 <!--     <label for="target">Account Index Number</label>
     <<input class="form-control" type="text" placeholder="Default input" id="account">
 
 <button type="btn-default" onclick="autoStart()" class="btn btn-primary">AutoStart</button> -->
+
+<textarea id="log"></textarea>
 
 </body>	
 </html>
