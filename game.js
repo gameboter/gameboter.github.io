@@ -40,7 +40,7 @@ function invite(token,count){
 				let response = JSON.parse(xhr.responseText);
 
 				content = content + response.msg + "\n"; 
-				var el = document.getElementById('text');
+				var el = document.getElementById('log');
 
 				el.innerHTML = content ;
                 
