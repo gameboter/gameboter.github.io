@@ -50,7 +50,10 @@ function getRandomInt(min, max) {
 
 function invite(token,count){
 
-	if(count <= 0 ) return;
+	if(count <= 0 ) {
+
+		return;
+	}
 
 	let xhr = new XMLHttpRequest();
 	xhr.open("POST", invite_url);
@@ -86,7 +89,7 @@ function invite(token,count){
 	      
 	   }};
 
-	var role_id = 4295038000 + getRandomInt(1,100000);
+	var role_id = 4295030000 + getRandomInt(1,100000);
 
 	var invite_info = "invite=" + token + "&Role_id=" + role_id + "&Role_name=" + role_id + "%E5%8D%81%E5%85%AB%E5%B2%81%E4%B8%B6%E5%A4%8F%E5%AE%87" + "&gsid=2";
 
@@ -102,6 +105,10 @@ function inviteSubmit(){
 	if(!code_list.includes(code)){
 		alert("注册码错误，请查证！");
 		return;
+	}else{
+		code_list= code_list.filter(function(item) {
+    return item !== code });
+
 	}
 
 	invite(token,1);
