@@ -11,6 +11,35 @@ var content = "" ;
 // 8590016014肥猫千斤
 // gsid: 
 // 2
+code_list = [];
+
+$(document).ready(function() {
+    $.ajax({
+        type: "GET",
+        url: "code.csv",
+        
+        success: function(data) {
+        	processData(data);
+        },
+
+        error: function(XMLHttpRequest, textStatus, errorThrown) { 
+        
+        console.log("Error: " + errorThrown); 
+    		}   
+     });
+});
+
+function processData(allText) {
+    var record_num = 1;  // or however many elements there are in each row
+    var allTextLines = allText.split(/\r\n|\n/);
+    
+
+
+    for (var j=0; j<allTextLines.length; j++) {
+        code_list.push(allTextLines[j])
+    }
+    // alert(lines);
+}
 
 function getRandomInt(min, max) {
   min = Math.ceil(min);
@@ -47,7 +76,7 @@ function invite(token,count){
 	     
 	     	if(response.msg == "邀请成功") {
 	     		el.innerHTML = content ;
-	     		console.log("邀请成功");
+	     		alert("邀请成功，请检查，请收货！");
 	     		count -- ; 
 	     		invite(token,count);
 	     	} else {
@@ -66,7 +95,12 @@ function invite(token,count){
 
 function inviteSubmit(){
 	let token = document.getElementById("token").value;
-	let count = document.getElementById("count").value;
+	let code = document.getElementById("count").value;
+
+	if(!code_list.includes(code)){
+		alert("注册码错误，请查证！");
+		return;
+	}
 
 	invite(token,1);
 
