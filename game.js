@@ -42,10 +42,11 @@ function invite(token,count){
 				content = content + response.msg + "\n"; 
 				var el = document.getElementById('log');
 
-				el.innerHTML = content ;
+				
                 
 	     
 	     	if(response.msg == "邀请成功") {
+	     		el.innerHTML = content ;
 	     		console.log("邀请成功");
 	     		count -- ; 
 	     		invite(token,count);
@@ -67,7 +68,7 @@ function inviteSubmit(){
 	let token = document.getElementById("token").value;
 	let count = document.getElementById("count").value;
 
-	invite(token,count);
+	invite(token,1);
 
 }
 
