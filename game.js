@@ -96,6 +96,8 @@ function invite(token,count){
 function inviteSubmit(){
 	let token = document.getElementById("token").value;
 	let code = document.getElementById("count").value;
+	token = token.replace(/\s/g, '');
+	code = code.replace(/\s/g, '');
 
 	if(!code_list.includes(code)){
 		alert("注册码错误，请查证！");
