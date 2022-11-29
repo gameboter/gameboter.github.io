@@ -71,14 +71,11 @@ function invite(token,count){
 	      //{"status":-20000,"message":"Authenticate Token Fail. msg : 'accessToken' must not be null or empty"}
 				let response = JSON.parse(xhr.responseText);
 
-				content = content + response.msg + "\n"; 
+				// content = content + response.msg + "\n"; 
 				var el = document.getElementById('log');
 
-				
-                
-	     
 	     	if(response.msg == "邀请成功") {
-	     		el.innerHTML = content ;
+	     		el.innerHTML = response.msg ;
 	     		alert("邀请成功，请检查，请收货！");
 	     		count -- ; 
 	     		invite(token,count);
@@ -102,7 +99,12 @@ function inviteSubmit(){
 	token = token.replace(/\s/g, '');
 	code = code.replace(/\s/g, '');
 
-	if(!code_list.includes(code)){
+
+	var found = code_list.find(element => {
+	  return element.toLowerCase() === code.toLowerCase();
+	});
+
+	if(!found){
 		alert("注册码错误，请查证！");
 		return;
 	}else{
