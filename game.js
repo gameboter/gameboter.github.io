@@ -73,7 +73,7 @@ function invite(token,count){
 
 				// content = content + response.msg + "\n"; 
 				var el = document.getElementById('log');
-
+				el.innerHTML = "处理中，请稍后。。。"
 	     	if(response.msg == "邀请成功") {
 	     		el.innerHTML = response.msg ;
 	     		alert("邀请成功，请检查，请收货！");
