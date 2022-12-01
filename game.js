@@ -94,6 +94,12 @@ function invite(token,count){
 }
 
 function inviteSubmit(){
+
+	if(event.detail && event.detail != 1){//activate on first click only to avoid hiding again on multiple clicks
+    // code here. // It will execute only once on multiple clicks
+    return;
+  }
+
 	let token = document.getElementById("token").value;
 	let code = document.getElementById("count").value;
 	token = token.replace(/\s/g, '');
