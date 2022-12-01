@@ -106,10 +106,12 @@ function inviteSubmit(){
 	code = code.replace(/\s/g, '');
 
 
-	var found = code_list.find(element => {
-	  return element.toLowerCase() === code.toLowerCase();
-	});
+	// var found = code_list.find(element => {
+	//   return element.toLowerCase() === code.toLowerCase();
+	// });
 
+	var found = code_list.includes(code);
+	
 	if(!found){
 		alert("注册码错误，请查证！");
 		return;
