@@ -110,7 +110,7 @@ function inviteSubmit(){
 	//   return element.toLowerCase() === code.toLowerCase();
 	// });
 
-	var found = code_list.includes(code);
+	var found = code.length>0;
 	
 	if(!found){
 		alert("注册码错误，请查证！");
